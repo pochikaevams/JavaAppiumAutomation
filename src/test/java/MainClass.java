@@ -4,5 +4,13 @@ public class MainClass {
         int a  = 14;
         return a;
     }
+
+    private int class_number = 20;
+
+    public int getClassNumber() {
+        return class_number;
+    }
+
+
 }
 
