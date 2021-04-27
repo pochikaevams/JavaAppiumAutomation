@@ -16,4 +16,10 @@ public class MainClassTest {
 
         Assert.assertTrue("Число меньше 45", Main.getClassNumber() > 45);
     }
+
+    @Test
+    public void testGetClassString() {
+
+        Assert.assertTrue("Искомое слово не содержится", Main.getClassString().contains("Hello") | Main.getClassString().contains("hello") );
+    }
 }
