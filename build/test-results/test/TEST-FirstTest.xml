@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="FirstTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-05-15T08:08:33" hostname="MacBookRDLVDQ.local" time="9.425">
+<testsuite name="FirstTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-05-15T08:33:32" hostname="MacBookRDLVDQ.local" time="19.673">
   <properties/>
-  <testcase name="testAssertElementHasText" classname="FirstTest" time="9.425"/>
+  <testcase name="testCancelSearchSecond" classname="FirstTest" time="19.673"/>
   <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[May 15, 2021 3:08:40 PM org.openqa.selenium.remote.ProtocolHandshake createSession
+  <system-err><![CDATA[May 15, 2021 3:33:41 PM org.openqa.selenium.remote.ProtocolHandshake createSession
 INFO: Detected dialect: OSS
 ]]></system-err>
 </testsuite>

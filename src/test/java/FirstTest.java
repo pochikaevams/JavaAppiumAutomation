@@ -79,6 +79,59 @@ public class FirstTest {
         assertElementHasText(locator, expectedText, errorMessage);
     }
 
+    @Test
+    public void testCancelSearchSecond()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text,'Search…')]"),
+                "Java",
+                "Cannot find search input",
+                5
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@index='0']"),
+                "Cannot find article title",
+                15
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@index='1']"),
+                "Cannot find article title",
+                15
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//*[@index='2']"),
+                "Cannot find article title",
+                15
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find closeButton to cancel search",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find closeButton to cancel search",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "CloseButton is still present on the page",
+                5
+        );
+    }
+
     private void assertElementHasText(By by, String expectedText, String errorMessage) {
         WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.withMessage(errorMessage + "/n");
