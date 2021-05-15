@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
 
@@ -130,6 +131,37 @@ public class FirstTest {
                 "CloseButton is still present on the page",
                 5
         );
+    }
+
+    @Test
+    public void testSearchResultsText(){
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Can't find element search", 5);
+
+        String text = "Java";
+
+        waitForElementAndSendKeys(By.xpath("//*[contains (@resource-id, 'search_src_text')]"), text, "Cannot find search input",5);
+
+        driver.hideKeyboard();
+
+        List<WebElement> articles = waitForElementsPresent(By.xpath(
+                "//*[contains (@resource-id, 'org.wikipedia:id/page_list_item_title')]"),
+                "Count not find any elements");
+
+        for(WebElement article : articles){
+            Assert.assertTrue(text, article.getText().contains(text));
+        }
+    }
+
+    private List<WebElement> waitForElementsPresent(By by, String errorMessage, long timeoutSeconds){
+        WebDriverWait wait = new WebDriverWait(driver, timeoutSeconds);
+        wait.withMessage(errorMessage + "\n");
+        wait.until(ExpectedConditions.presenceOfElementLocated(by));
+        return driver.findElements(by);
+    }
+
+    private List<WebElement> waitForElementsPresent(By by, String errorMessage){
+        return waitForElementsPresent(by, errorMessage, 15);
     }
 
     private void assertElementHasText(By by, String expectedText, String errorMessage) {
