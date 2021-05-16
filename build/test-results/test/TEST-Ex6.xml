@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Ex6" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-05-16T05:04:21" hostname="MacBookRDLVDQ.local" time="22.462">
-  <properties/>
-  <testcase name="testEx6" classname="Ex6" time="22.462"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[May 16, 2021 12:04:28 PM org.openqa.selenium.remote.ProtocolHandshake createSession
-INFO: Detected dialect: OSS
-]]></system-err>
-</testsuite>
