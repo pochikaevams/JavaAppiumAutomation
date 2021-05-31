@@ -7,6 +7,7 @@ public class SearchPageObject extends MainPageObject {
     public static final String SEARCH_INIT_ELEMENT = "//*[contains(@text, 'Search Wikipedia')]";
     public static final String SEARCH_INPUT = "//*[contains(@text, 'Search…')]";
     public static final String SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']";
+    public static final String SEARCH_RESULT_TITLE_AND_DESC_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='{TITLE_TEXT}']/../*[@resource-id='org.wikipedia:id/page_list_item_description'][@text='{DESCRIPTION_TEXT}']";
     public static final String SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn";
     public static final String SEARCH_RESULTS_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']";
     public static final String SEARCH_EMPTY_RESULTS_ELEMENT = "//*[@text='No results found']";
@@ -77,6 +78,16 @@ public class SearchPageObject extends MainPageObject {
 
     public void assertThereIsNoResultOfSearch() {
         this.asserElementNotPresent(By.xpath(SEARCH_RESULTS_ELEMENT), "We supposed not to find any results");
+    }
+
+    private static String getResultTitleAndTextSearchElement(String title_text, String description_text) {
+        return SEARCH_RESULT_TITLE_AND_DESC_TPL.replace("{TITLE_TEXT}", title_text).replace("{DESCRIPTION_TEXT}", description_text);
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description) {
+        String search_result_xpath = getResultTitleAndTextSearchElement(title, description);
+        this.waitForElementPresent(By.xpath(search_result_xpath), "Cannot find search result with title " + title +
+                " AND description " + description);
     }
 
 }
