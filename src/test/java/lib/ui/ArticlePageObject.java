@@ -1,20 +1,21 @@
 package lib.ui;
-
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject {
-    private static final String TITLE = "org.wikipedia:id/view_page_title_text";
-    private static final String FOOTER_ELEMET = "//*[@text='View page in browser']";
-    private static final String OPTIONS_BUTTON = "//android.widget.ImageView[@content-desc=\"More options\"]";
-    private static final String OPTIONS_ADD_TO_MY_LIST = "//*[@text='Add to reading list']";
-    private static final String ADD_TO_MY_LIST_OVERLAY = "org.wikipedia:id/onboarding_button";
-    private static final String MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input";
-    private static final String MY_LIST_OK_BUTTON = "//*[@text= 'OK']";
-    private static final String CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']";
-    private static final String SAVED_LIST_NAME_TLP = "//android.widget.TextView[@text='{LIST_NAME}']";
+abstract public class ArticlePageObject extends MainPageObject {
+
+    public static String TITLE;
+    protected static String FOOTER_ELEMENT;
+    protected static String OPTIONS_BUTTON;
+    protected static String OPTIONS_ADD_TO_MY_LIST;
+    protected static String ADD_TO_MY_LIST_OVERLAY;
+    protected static String MY_LIST_NAME_INPUT;
+    protected static String MY_LIST_OK_BUTTON;
+    protected static String CLOSE_ARTICLE_BUTTON;
+    protected static String SAVED_LIST_NAME_TLP;
 
 
 
@@ -23,52 +24,60 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     public WebElement waitForTitleElement() {
-        return this.waitForElementPresent(By.id(TITLE), "Cannot find article title on page", 15);
+        return this.waitForElementPresent(TITLE, "Cannot find article title on page", 15);
     }
 
     public String getArticleTitle() {
         WebElement title_element = waitForTitleElement();
-        return title_element.getAttribute("text");
+        if (Platform.getInstance().isAndroid()) {
+            return title_element.getAttribute("text");
+        } else {
+            return title_element.getAttribute("name");
+        }
     }
 
     public void swipeToFooter() {
-        this.swipeUpToFindElement(By.xpath(FOOTER_ELEMET), "Cannot find footer", 20);
+        if(Platform.getInstance().isAndroid()) {
+            this.swipeUpToFindElement(FOOTER_ELEMENT, "Cannot find footer", 40);
+        } else {
+            this.swipeUpTillElementAppear(FOOTER_ELEMENT, "Cannot find footer", 40);
+        }
     }
 
-    public void addArticleToMyList(String folder) {
+    public void addArticleToMyList(String name_of_folder) {
         this.waitForElementAndClick(
-                By.xpath(OPTIONS_BUTTON),
+                OPTIONS_BUTTON,
                 "Cannot find button",
                 15
         );
 
         this.waitForElementAndClick(
-                By.xpath(OPTIONS_ADD_TO_MY_LIST),
+                OPTIONS_ADD_TO_MY_LIST,
                 "Cannot find option to add article to reading list",
                 15
         );
 
         this.waitForElementAndClick(
-                By.id(ADD_TO_MY_LIST_OVERLAY),
+                ADD_TO_MY_LIST_OVERLAY,
                 "Cannot find 'Got it' tip overlay",
                 15
         );
 
         this.waitForElementAndClear(
-                By.id(MY_LIST_NAME_INPUT),
+                MY_LIST_NAME_INPUT,
                 "Cannot find input to set name of article folder",
                 15
         );
 
         this.waitForElementAndSendKeys(
-                By.id(MY_LIST_NAME_INPUT),
-                folder,
+                MY_LIST_NAME_INPUT,
+                name_of_folder,
                 "Cannot put text into articles folder input",
                 15
         );
 
         this.waitForElementAndClick(
-                By.xpath(MY_LIST_OK_BUTTON),
+                MY_LIST_OK_BUTTON,
                 "Cannot find OK button",
                 15
         );
@@ -76,19 +85,19 @@ public class ArticlePageObject extends MainPageObject {
 
     public void addArticleToExcitingList(String name_of_folder) {
         waitForElementAndClick(
-                By.xpath(OPTIONS_BUTTON),
+                OPTIONS_BUTTON,
                 "Cannot find button",
                 15
         );
 
         waitForElementAndClick(
-                By.xpath(OPTIONS_ADD_TO_MY_LIST),
+                OPTIONS_ADD_TO_MY_LIST,
                 "Cannot find option to add article to reading list",
                 15
         );
 
         waitForElementAndClick(
-                By.xpath(SAVED_LIST_NAME_TLP.replace("{LIST_NAME}", name_of_folder)),
+                SAVED_LIST_NAME_TLP.replace("{LIST_NAME}", name_of_folder),
                 "Cannot find 'Got it' tip overlay",
                 15
         );
@@ -97,13 +106,14 @@ public class ArticlePageObject extends MainPageObject {
 
     public void closeArticle() {
         this.waitForElementAndClick(
-                By.xpath(CLOSE_ARTICLE_BUTTON),
+                CLOSE_ARTICLE_BUTTON,
                 "Cannot close article",
                 15
         );
     }
 
-    private void assertElementPresent(By by, String error_message) {
+    private void assertElementPresent(String locator, String error_message) {
+        By by = this.getLocatorByString(locator);
         try {
             driver.findElement(by);
         } catch (NoSuchElementException e) {
@@ -113,15 +123,20 @@ public class ArticlePageObject extends MainPageObject {
     }
 
     public void assertTitlePresent() {
-        assertElementPresent(By.id(TITLE), "Title text is not present");
+        assertElementPresent(TITLE, "Title text is not present");
     }
 
     public boolean isPageTitlePresentNow() {
         try {
-            driver.findElement(By.id(TITLE));
+            By by = this.getLocatorByString(TITLE);
+            driver.findElement(by);
         } catch (NoSuchElementException e) {
             return false;
         }
         return true;
+    }
+
+    public void addArticleToMySaved() {
+        this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST, "Cannot find option to add article to reading list", 20);
     }
 }
